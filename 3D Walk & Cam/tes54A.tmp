@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://d04l3cff0pmxx"]
+
+[ext_resource type="Texture2D" uid="uid://bnppm4nrph115" path="res://icon.svg" id="1_htvg7"]
+[ext_resource type="Script" path="res://Player_Walk.gd" id="2_iikua"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_l8rjh"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_pm4xu"]
+sky_material = SubResource("ProceduralSkyMaterial_l8rjh")
+
+[sub_resource type="Environment" id="Environment_swscl"]
+background_mode = 2
+sky = SubResource("Sky_pm4xu")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyxa7"]
+albedo_texture = ExtResource("1_htvg7")
+uv1_triplanar = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_8kqpo"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ds3l1"]
+
+[node name="Test Scene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_swscl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.174988, -0.49292, 2.46039)
+size = Vector3(24.6295, 0.0141602, 24.288)
+material = SubResource("StandardMaterial3D_kyxa7")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("2_iikua")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_8kqpo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_ds3l1")
+
+[node name="Camera_Point" type="Node3D" parent="Player"]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Player/Camera_Point"]
+
+[node name="Camera3D" type="Camera3D" parent="Player/Camera_Point/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 0.966587, 0.25634, 0, -0.25634, 0.966587, 0, 1.42931, 3.26882)
